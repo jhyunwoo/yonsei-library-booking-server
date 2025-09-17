@@ -7,36 +7,48 @@ WORKDIR /app
 # 3. 환경 변수 설정
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+# 화면 깨짐 방지를 위한 언어 설정 추가
+ENV LANG C.UTF-8
 
-# --- [추가된 부분 시작] ---
-# root 사용자로 전환하여 패키지 설치
+# 4. root 사용자로 전환하여 패키지 설치
 USER root
 
-# Chromium 브라우저와 chromedriver 설치
+# 5. Chromium 브라우저, 드라이버 및 디버깅용 유틸리티 설치
+# 한글 폰트 및 기타 라이브러리 추가
 RUN apt-get update && apt-get install -y \
     chromium \
-    chromium-driver
-# --- [추가된 부분 끝] ---
+    chromium-driver \
+    libnss3 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    fonts-nanum* \
+    && rm -rf /var/lib/apt/lists/*
 
-# 4. 의존성 설치
+# 6. 의존성 설치
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 5. 애플리케이션 코드 복사
+# 7. 애플리케이션 코드 복사
 COPY . .
 
-# 6. Non-root 유저 생성 및 전환
-RUN addgroup --system nonroot && adduser --system --ingroup nonroot nonroot
+# 8. Non-root 유저 생성 및 전환
+RUN groupadd --system nonroot && useradd --system --gid nonroot nonroot
 
-# --- [추가된 부분 시작] ---
-# nonroot 유저가 소유한 임시 폴더를 생성
-RUN mkdir /app/temp && chown -R nonroot:nonroot /app/temp
-# --- [추가된 부분 끝] ---
-
+# 9. 임시 폴더 및 스크린샷 폴더 생성 및 권한 부여
+RUN mkdir /app/temp /app/screenshots && chown -R nonroot:nonroot /app/temp /app/screenshots
 USER nonroot
 
-# 7. 포트 노출
+# 10. 포트 노출
 EXPOSE 8000
 
-# 8. 애플리케이션 실행
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]
+# 11. 애플리케이션 실행 (Gunicorn 타임아웃을 120초로 설정)
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--timeout", "120", "--workers", "1", "app:app"]
