@@ -50,14 +50,14 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
         login_button.click()
 
         # 로그인 후 페이지가 로드될 때까지 잠시 기다립니다.
-        time.sleep(5)
+        time.sleep(2)
 
         # --- [추가된 코드] ---
         # 로그인 후 좌석/실 현황 및 예약 페이지로 이동합니다.
         driver.get("https://library.yonsei.ac.kr/relation/seat")
         # --------------------
 
-        time.sleep(5)
+        time.sleep(2)
 
         wait = WebDriverWait(driver, 5)
 
@@ -69,7 +69,7 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
 
         print("✅ '시설현황/예약' 링크를 클릭했습니다.")
 
-        time.sleep(3)
+        time.sleep(1)
 
         element = driver.find_element(By.XPATH, "//td[1]//div[contains(@class, 'selectFacility')][last()]")
 
