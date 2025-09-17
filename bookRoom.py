@@ -1,12 +1,25 @@
 import time
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def book_room(student_id, password, start_time,duration, library, room, room_number, participants ):
-    # Chrome 드라이버를 실행합니다.
-    driver = webdriver.Chrome()
+    # Chrome 옵션 설정
+    chrome_options = Options()
+    chrome_options.binary_location = "/usr/bin/chromium"  # Chromium 브라우저 경로
+    chrome_options.add_argument("--headless")  # 헤드리스 모드 활성화
+    chrome_options.add_argument("--no-sandbox")  # 컨테이너 환경에서 필수적인 옵션
+    chrome_options.add_argument("--disable-dev-shm-usage")  # 공유 메모리 관련 문제 방지
+    chrome_options.add_argument("--disable-gpu")  # GPU 가속 비활성화
+
+    # Chromedriver 서비스 설정
+    service = Service(executable_path="/usr/bin/chromedriver")  # Chromedriver 경로
+
+    # 드라이버 초기화
+    driver = webdriver.Chrome(service=service, options=chrome_options)
 
     # 연세대학교 도서관 로그인 페이지로 이동합니다.
     driver.get("https://library.yonsei.ac.kr/login")
@@ -38,7 +51,7 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
 
     time.sleep(5)
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 5)
 
     # '시설현황/예약' 링크가 클릭 가능할 때까지 기다린 후 클릭합니다.
     facility_link = wait.until(
@@ -48,7 +61,7 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
 
     print("✅ '시설현황/예약' 링크를 클릭했습니다.")
 
-    time.sleep(5)
+    time.sleep(3)
 
     element = driver.find_element(By.XPATH, "//td[1]//div[contains(@class, 'selectFacility')][last()]")
 
