@@ -10,7 +10,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def book_room(student_id, password, start_time,duration, library, room, room_number, participants ):
     # 1. 고유한 임시 디렉토리 생성
-    temp_dir = tempfile.mkdtemp()
+    temp_dir = tempfile.mkdtemp(dir="/app/temp")
 
     # 드라이버와 브라우저를 try...finally 블록으로 감싸서 항상 종료 및 정리되도록 함
     driver = None

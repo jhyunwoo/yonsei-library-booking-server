@@ -27,6 +27,12 @@ COPY . .
 
 # 6. Non-root 유저 생성 및 전환
 RUN addgroup --system nonroot && adduser --system --ingroup nonroot nonroot
+
+# --- [추가된 부분 시작] ---
+# nonroot 유저가 소유한 임시 폴더를 생성
+RUN mkdir /app/temp && chown -R nonroot:nonroot /app/temp
+# --- [추가된 부분 끝] ---
+
 USER nonroot
 
 # 7. 포트 노출
