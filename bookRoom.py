@@ -24,7 +24,7 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
         chrome_options.add_argument("--remote-debugging-port=9292")
 
         # Chromedriver 서비스 설정
-        service = Service(executable_path="/usr/bin/chromedriver")
+        service = Service()
 
         # 드라이버 초기화
         driver = webdriver.Chrome(service=service, options=chrome_options)
