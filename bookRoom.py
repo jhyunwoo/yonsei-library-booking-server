@@ -17,11 +17,11 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
     try:
         # Chrome 옵션 설정
         chrome_options = Options()
-        chrome_options.binary_location = "/usr/bin/chromium"
         chrome_options.add_argument(f"--user-data-dir={temp_dir}")
-        chrome_options.add_argument("--headless")
+        chrome_options.add_argument('--headless')
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--remote-debugging-port=9292")
 
         # Chromedriver 서비스 설정
         service = Service(executable_path="/usr/bin/chromedriver")
