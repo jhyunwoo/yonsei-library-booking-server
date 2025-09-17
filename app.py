@@ -10,7 +10,6 @@ class Participant(TypedDict):
     id: str
     phone: str
 
-
 @app.route('/')
 def hello_world():  # put application's code here
     return 'Server is running'
