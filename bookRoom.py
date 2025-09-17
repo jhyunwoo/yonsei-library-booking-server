@@ -18,13 +18,10 @@ def book_room(student_id, password, start_time,duration, library, room, room_num
         # Chrome 옵션 설정
         chrome_options = Options()
         chrome_options.binary_location = "/usr/bin/chromium"
+        chrome_options.add_argument(f"--user-data-dir={temp_dir}")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
-        # 2. 생성된 임시 디렉토리를 사용자 데이터 디렉토리로 지정
-        print(temp_dir)
-        chrome_options.add_argument(f"--user-data-dir={temp_dir}")
 
         # Chromedriver 서비스 설정
         service = Service(executable_path="/usr/bin/chromedriver")
